@@ -4,21 +4,19 @@
 ## AnyKernel setup
 # begin properties
 properties() { '
-kernel.string=ExampleKernel by osm0sis @ xda-developers
+kernel.string=klabit Kernel for the Samsung Galaxy S9+ by @klabit87
 do.devicecheck=1
 do.modules=0
 do.cleanup=1
 do.cleanuponabort=0
-device.name1=maguro
-device.name2=toro
-device.name3=toroplus
-device.name4=tuna
-device.name5=
-supported.versions=
+device.name1=star2qlte
+device.name2=star2qltexx
+device.name3=star2qltezh
+device.name4=star2qltechn
 '; } # end properties
 
 # shell variables
-block=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot;
+block=/dev/block/platform/soc/1d84000.ufshc/by-name/boot;
 is_slot_device=0;
 ramdisk_compression=auto;
 
@@ -39,24 +37,30 @@ dump_boot;
 
 # begin ramdisk changes
 
-# init.rc
-backup_file init.rc;
-replace_string init.rc "cpuctl cpu,timer_slack" "mount cgroup none /dev/cpuctl cpu" "mount cgroup none /dev/cpuctl cpu,timer_slack";
+# Warn user of their support status
+android_version="$(file_getprop /system/build.prop "ro.build.version.release")";
+#security_patch="$(file_getprop /system/build.prop "ro.build.version.security_patch")";
+case "$android_version:$security_patch" in
+  "9") support_status="a supported";;
+  "8.1.0") support_status="an unsupported";;
+  *) die "Completely unsupported OS configuration!";;
+esac;
+ui_print " "; ui_print "You are on $android_version with the $security_patch security patch level! This is $support_status configuration...";
 
-# init.tuna.rc
-backup_file init.tuna.rc;
-insert_line init.tuna.rc "nodiratime barrier=0" after "mount_all /fstab.tuna" "\tmount ext4 /dev/block/platform/omap/omap_hsmmc.0/by-name/userdata /data remount nosuid nodev noatime nodiratime barrier=0";
-append_file init.tuna.rc "bootscript" init.tuna;
+# If the kernel image and dtbs are separated in the zip
+decompressed_image=/tmp/anykernel/kernel/Image
+compressed_image=$decompressed_image.gz
+ui_print " "; ui_print "Magisk detected! Patching kernel so reflashing Magisk is not necessary...";
+if [ -f $compressed_image ]; then
+  # Hexpatch the kernel if Magisk is installed ('skip_initramfs' -> 'want_initramfs')
+  if [ -d $ramdisk/.backup ]; then
+    $bin/magiskboot --decompress $compressed_image $decompressed_image;
+    $bin/magiskboot --hexpatch $decompressed_image 736B69705F696E697472616D667300 77616E745F696E697472616D667300;
+    $bin/magiskboot --compress=gzip $decompressed_image $compressed_image;
+  fi;
+fi;
 
-# fstab.tuna
-backup_file fstab.tuna;
-patch_fstab fstab.tuna /system ext4 options "noatime,barrier=1" "noatime,nodiratime,barrier=0";
-patch_fstab fstab.tuna /cache ext4 options "barrier=1" "barrier=0,nomblk_io_submit";
-patch_fstab fstab.tuna /data ext4 options "data=ordered" "nomblk_io_submit,data=writeback";
-append_file fstab.tuna "usbdisk" fstab;
-
-# end ramdisk changes
-
+# Install the boot image
 write_boot;
 ## end install
 
