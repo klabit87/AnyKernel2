@@ -1,0 +1,4 @@
+dtbs/
+kernel/
+version/
+Image.gz-dtb
