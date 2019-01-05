@@ -4,15 +4,15 @@
 ## AnyKernel setup
 # begin properties
 properties() { '
-kernel.string=klabit Kernel for the Samsung Galaxy S9+ by @klabit87
+kernel.string=klabit Kernel for the Samsung Galaxy S9 by @klabit87
 do.devicecheck=1
 do.modules=0
 do.cleanup=1
 do.cleanuponabort=0
-device.name1=star2qlte
-device.name2=star2qltexx
-device.name3=star2qltezh
-device.name4=star2qltechn
+device.name1=starqlte
+device.name2=starqltexx
+device.name3=starqltezh
+device.name4=starqltechn
 '; } # end properties
 
 # shell variables
