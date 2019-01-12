@@ -13,6 +13,8 @@ device.name1=star2qlte
 device.name2=star2qltexx
 device.name3=star2qltezh
 device.name4=star2qltechn
+device.name5=
+supported.versions=
 '; } # end properties
 
 # shell variables
@@ -31,6 +33,11 @@ die() {
   ui_print " "; ui_print "$*";
   exit 1;
 }
+
+## AnyKernel file attributes
+# set permissions/ownership for included ramdisk files
+chmod -R 750 $ramdisk/*;
+chown -R root:root $ramdisk/*;
 
 
 ## AnyKernel install
