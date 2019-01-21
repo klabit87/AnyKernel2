@@ -37,11 +37,18 @@ die() {
 ## AnyKernel file attributes
 # set permissions/ownership for included ramdisk files
 chmod -R 750 $ramdisk/*;
+chmod -R 755 $ramdisk/sbin;
 chown -R root:root $ramdisk/*;
 
 
 ## AnyKernel install
 dump_boot;
+
+## Begin ramdisk changes
+ui_print "Patching ramdisk to fake official status...";
+backup_file init.rc;
+insert_line init.rc "init.services.rc" after "import /init.usb.configfs.rc" "import /init.services.rc";
+
 
 
 # Warn user of their support status
