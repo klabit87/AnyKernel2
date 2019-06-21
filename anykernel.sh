@@ -4,7 +4,7 @@
 ## AnyKernel setup
 # begin properties
 properties() { '
-kernel.string=klabit Kernel for the Samsung Galaxy S9+ by @klabit87
+kernel.string=klabit Pie Kernel for the Samsung Galaxy S9+ by @klabit87
 do.devicecheck=1
 do.modules=0
 do.cleanup=1
@@ -18,7 +18,7 @@ supported.versions=
 '; } # end properties
 
 # shell variables
-block=/dev/block/bootdevice/by-name/boot;
+block=/dev/block/platform/soc/1d84000.ufshc/by-name/boot;
 is_slot_device=0;
 ramdisk_compression=auto;
 
@@ -45,20 +45,20 @@ dump_boot;
 
 
 # Warn user of their support status
-#android_version="$(file_getprop /system/build.prop "ro.build.version.release")";
+android_version="$(file_getprop /system/build.prop "ro.build.version.release")";
 #security_patch="$(file_getprop /system/build.prop "ro.build.version.security_patch")";
-#case "$android_version:$security_patch" in
-#  "9:2018-11-05") support_status="a supported";;
-#  "8.1.0"*|"P"*|"9"*) support_status="an unsupported";;
-#  *) die "Completely unsupported OS configuration!";;
-#esac;
-#ui_print " "; ui_print "You are on $android_version with the $security_patch security patch level! This is $support_status configuration...";
+case "$android_version" in
+  "9") support_status="a supported";;
+  "8.1.0") support_status="an unsupported";;
+  *) die "Completely unsupported OS configuration!";;
+esac;
+ui_print " "; ui_print "You are on $android_version! This is $support_status configuration...";
 
 
 # If the kernel image and dtbs are separated in the zip
 decompressed_image=/tmp/anykernel/kernel/Image
 compressed_image=$decompressed_image.gz
-ui_print " "; ui_print "Magisk detected! Patching kernel so reflashing Magisk is not necessary...";
+ui_print " "; ui_print "Magisk detected! Patching kernel so reflashing Magisk shouldn't be necessary...";
 if [ -f $compressed_image ]; then
   # Hexpatch the kernel if Magisk is installed ('skip_initramfs' -> 'want_initramfs')
   if [ -d $ramdisk/.backup ]; then
