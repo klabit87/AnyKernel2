@@ -4,7 +4,7 @@
 ## AnyKernel setup
 # begin properties
 properties() { '
-kernel.string=klabit Kernel for the Samsung Galaxy S9+ by @klabit87
+kernel.string=klabit Kernel for the Samsung Galaxy Note 9 by @klabit87
 do.devicecheck=1
 do.modules=0
 do.cleanup=1
@@ -50,7 +50,7 @@ ui_print " "; ui_print "You are on $android_version with the $security_patch sec
 # If the kernel image and dtbs are separated in the zip
 decompressed_image=/tmp/anykernel/kernel/Image
 compressed_image=$decompressed_image.gz
-ui_print " "; ui_print "Magisk detected! Patching kernel so reflashing Magisk is not necessary...";
+# ui_print " "; ui_print "Magisk detected! Patching kernel so reflashing Magisk is not necessary...";
 if [ -f $compressed_image ]; then
   # Hexpatch the kernel if Magisk is installed ('skip_initramfs' -> 'want_initramfs')
   if [ -d $ramdisk/.backup ]; then
