@@ -13,6 +13,8 @@ device.name1=star2qlte
 device.name2=star2qltexx
 device.name3=star2qltezh
 device.name4=star2qltechn
+supported.versions=
+supported.patchlevels=
 '; } # end properties
 
 # shell variables
