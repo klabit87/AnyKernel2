@@ -13,6 +13,8 @@ device.name1=starqlte
 device.name2=starqltexx
 device.name3=starqltezh
 device.name4=starqltechn
+supported.versions=
+supported.patchlevels=
 '; } # end properties
 
 # shell variables
