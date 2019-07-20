@@ -13,6 +13,8 @@ device.name1=crownqlte
 device.name2=crownqltexx
 device.name3=crownqltezh
 device.name4=crownqltechn
+supported.versions=
+supported.patchlevels=
 '; } # end properties
 
 # shell variables
