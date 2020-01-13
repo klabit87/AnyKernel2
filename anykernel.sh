@@ -5,14 +5,14 @@
 # begin properties
 properties() { '
 kernel.string=klabit Kernel for the Samsung Galaxy Note 9 by @klabit87
-do.devicecheck=1
+do.devicecheck=0
 do.modules=0
 do.cleanup=1
 do.cleanuponabort=0
-device.name1=star2qlte
-device.name2=star2qltexx
-device.name3=star2qltezh
-device.name4=star2qltechn
+device.name1=crownqlte
+device.name2=crownqltexx
+device.name3=crownqltezh
+device.name4=crownqltechn
 '; } # end properties
 
 # shell variables
@@ -37,15 +37,24 @@ dump_boot;
 
 # begin ramdisk changes
 
+# Ramdisk changes - Set split_img OSLevel depending on ROM
+(grep -w ro.build.version.security_patch | cut -d= -f2) </system/build.prop > /tmp/rom_oslevel
+ROM_OSLEVEL=`cat /tmp/rom_oslevel`
+echo $ROM_OSLEVEL | rev | cut -c4- | rev > /tmp/rom_oslevel
+ROM_OSLEVEL=`cat /tmp/rom_oslevel`
+ui_print "- Setting security patch level to $ROM_OSLEVEL"
+echo $ROM_OSLEVEL > $split_img/boot.img-oslevel
+
 # Warn user of their support status
 android_version="$(file_getprop /system/build.prop "ro.build.version.release")";
 #security_patch="$(file_getprop /system/build.prop "ro.build.version.security_patch")";
 case "$android_version:$security_patch" in
+  "10") support_status="a supported";;
   "9") support_status="a supported";;
   "8.1.0") support_status="an unsupported";;
   *) die "Completely unsupported OS configuration!";;
 esac;
-ui_print " "; ui_print "You are on $android_version with the $security_patch security patch level! This is $support_status configuration...";
+ui_print " "; ui_print "You are on $android_version ! This is $support_status configuration...";
 
 # If the kernel image and dtbs are separated in the zip
 decompressed_image=/tmp/anykernel/kernel/Image
